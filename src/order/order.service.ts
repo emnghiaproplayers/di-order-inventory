@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InventoryService } from '../inventory/inventory.service';
-import { v4 as uuidv4 } from 'uuid';
 import { CreateOrderDto } from './dto/create-order.dto';
 
 @Injectable()
@@ -13,8 +12,10 @@ export class OrderService {
     // Gọi reserveStock từ InventoryService
     const reservation = this.inventoryService.reserveStock(productId, qty);
 
-    // Sinh orderId bằng UUID v4
-    const orderId = uuidv4();
+    // Sinh orderId bằng định dạng custom thay vì UUID v4
+    const timestamp = Date.now().toString(36);
+    const randomPart = Math.random().toString(36).substring(2, 9);
+    const orderId = `ord_${timestamp}_${randomPart}`;
 
     return {
       orderId,
@@ -23,3 +24,4 @@ export class OrderService {
     };
   }
 }
+
